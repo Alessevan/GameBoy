@@ -10,6 +10,7 @@ public:
 public:
     CPU(void);
     void execute(Instruction);
+    
     uint8 add(uint8);
     uint8 addhl(uint8);
     uint8 sub(uint8);
@@ -20,7 +21,7 @@ public:
     uint8 xor_(uint8);
     void cp(uint8);
     void ccf(void);
-    void spf(void);
+    void scf(void);
     void rra(void);
     void rla(void);
     void rrca();

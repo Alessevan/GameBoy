@@ -144,7 +144,7 @@ uint8 CPU::addhl(uint8 value) {
 uint8 CPU::adc(uint8 value) {
     uint16 new_val = (uint16) this->registers.a + (uint16) value + (uint16) this->registers.f.C;
     this->registers.f.C = new_val > 0xFF;
-    this->registers.f.Z = new_val & 0xFF == 0;
+    this->registers.f.Z = (new_val & 0xFF) == 0;
     this->registers.f.S = false;
     this->registers.f.H = ~((uint16) this->registers.a ^ (uint16) value) & ((uint16) this->registers.a ^ new_val);
     return (uint8) (new_val & 0xFF);
@@ -196,7 +196,7 @@ void CPU::ccf(void) {
     this->registers.f.C = true ^ this->registers.f.C;
 }
 
-void CPU::spf(void) {
+void CPU::scf(void) {
     this->registers.f.S = false;
     this->registers.f.H = false;
     this->registers.f.C = true;
