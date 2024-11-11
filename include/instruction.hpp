@@ -5,6 +5,7 @@ enum InstructionId {
     INSTR_NOP,
     INSTR_ADD,
     INSTR_ADDHL,
+    INSTR_ADDHL16,
     INSTR_ADC,
     INSTR_SUB,
     INSTR_SBC,
@@ -13,7 +14,9 @@ enum InstructionId {
     INSTR_XOR,
     INSTR_CP,
     INSTR_INC,
+    INSTR_INC16,
     INSTR_DEC,
+    INSTR_DEC16,
     INSTR_CCF,
     INSTR_SCF,
     INSTR_RRA,
@@ -31,7 +34,8 @@ enum InstructionId {
     INSTR_RLC,
     INSTR_SRA,
     INSTR_SLA,
-    INSTR_SWAP
+    INSTR_SWAP,
+    INSTR_ERR = 0xFFFF
 };
 
 class InstructionData {
@@ -45,7 +49,15 @@ enum TargetRegister {
     D = 0x04,
     E = 0x03,
     H = 0x06,
-    L = 0x05
+    L = 0x05,
+    HL_PTR = 0xFF
+};
+
+enum Target16Register {
+    BC = 0x01,
+    DE = 0x02,
+    HL = 0x03,
+    SP = 0xFF
 };
 
 class TargetInstructionData : public InstructionData {
@@ -58,17 +70,40 @@ public:
     friend class Instruction;
 };
 
+class Target16InstructionData : public InstructionData {
+    Target16Register target;
+protected:
+    Target16InstructionData(Target16Register);
+public:
+    Target16Register get_target(void);
+
+    friend class Instruction;
+};
+
 class NoInstructionData : public InstructionData {
 };
 
 class Instruction {
     InstructionId id;
     InstructionData data;
+    static Instruction from_byte_prefixed(uint8);
+    static Instruction from_byte_not_prefixed(uint8);
 public:
     Instruction(InstructionId, InstructionData);
     InstructionId getId(void);
     InstructionData getData(void);
+    static Instruction from_byte(uint8, bool);
     friend class CPU;
+};
+
+class NoInstruction : public Instruction {
+public:
+    NoInstruction(void): Instruction(INSTR_NOP, NoInstructionData()) {}
+};
+
+class ErrorInstruction : public Instruction {
+public:
+    ErrorInstruction(void): Instruction(INSTR_ERR, NoInstructionData()) {}
 };
 
 /**
@@ -95,6 +130,19 @@ class AddhlInstructionData : public TargetInstructionData {
 class AddhlInstruction : public Instruction {
 public:
     AddhlInstruction(TargetRegister reg) : Instruction(INSTR_ADDHL, AddhlInstructionData(reg)) {}
+};
+
+/**
+ * ADDHL Instruction
+ */
+class Addhl16InstructionData : public Target16InstructionData {
+    Addhl16InstructionData(Target16Register target) : Target16InstructionData(target) {}
+    friend class Addhl16Instruction;
+};
+
+class Addhl16Instruction : public Instruction {
+public:
+    Addhl16Instruction(Target16Register reg) : Instruction(INSTR_ADDHL16, Addhl16InstructionData(reg)) {}
 };
 
 /**
@@ -206,6 +254,20 @@ public:
     IncInstruction(TargetRegister reg) : Instruction(INSTR_INC, IncInstructionData(reg)) {}
 };
 
+
+/**
+ * Inc16 Instruction
+ */
+class Inc16InstructionData : public Target16InstructionData {
+    Inc16InstructionData(Target16Register target) : Target16InstructionData(target) {}
+    friend class Inc16Instruction;
+};
+
+class Inc16Instruction : public Instruction {
+public:
+    Inc16Instruction(Target16Register reg) : Instruction(INSTR_INC16, Inc16InstructionData(reg)) {}
+};
+
 /**
  * Dec Instruction
  */
@@ -217,6 +279,68 @@ class DecInstructionData : public TargetInstructionData {
 class DecInstruction : public Instruction {
 public:
     DecInstruction(TargetRegister reg) : Instruction(INSTR_DEC, DecInstructionData(reg)) {}
+};
+
+/**
+ * DEC16 Instruction
+ */
+class Dec16InstructionData : public Target16InstructionData {
+    Dec16InstructionData(Target16Register target) : Target16InstructionData(target) {}
+    friend class Dec16Instruction;
+};
+
+class Dec16Instruction : public Instruction {
+public:
+    Dec16Instruction(Target16Register reg) : Instruction(INSTR_DEC16, Dec16InstructionData(reg)) {}
+};
+
+
+/**
+ * CCF Instruction
+ */
+class CcfInstruction : public Instruction {
+public:
+    CcfInstruction(void): Instruction(INSTR_CCF, NoInstructionData()) {}
+};
+
+/**
+ * SCF Instruction
+ */
+class ScfInstruction : public Instruction {
+public:
+    ScfInstruction(void): Instruction(INSTR_SCF, NoInstructionData()) {}
+};
+
+/**
+ * RRA Instruction
+ */
+class RraInstruction : public Instruction {
+public:
+    RraInstruction(void): Instruction(INSTR_RRA, NoInstructionData()) {}
+};
+
+/**
+ * RLA Instruction
+ */
+class RlaInstruction : public Instruction {
+public:
+    RlaInstruction(void): Instruction(INSTR_RLA, NoInstructionData()) {}
+};
+
+/**
+ * RRCA Instruction
+ */
+class RrcaInstruction : public Instruction {
+public:
+    RrcaInstruction(void): Instruction(INSTR_RRCA, NoInstructionData()) {}
+};
+
+/**
+ * RLCA Instruction
+ */
+class RlcaInstruction : public Instruction {
+public:
+    RlcaInstruction(void): Instruction(INSTR_RLCA, NoInstructionData()) {}
 };
 
 /**

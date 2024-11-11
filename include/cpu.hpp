@@ -1,18 +1,21 @@
 #pragma once
 #include "instruction.hpp"
+#include "memory.hpp"
 #include "registers.hpp"
 
 class CPU {
-public:
     Registers registers;
     uint16 pc;
+    MemoryBus bus;
 
 public:
     CPU(void);
-    void execute(Instruction);
+    void step(void);
+    uint16 execute(Instruction);
     
     uint8 add(uint8);
     uint8 addhl(uint8);
+    uint16 addhl16(uint16);
     uint8 sub(uint8);
     uint8 sbc(uint8);
     uint8 adc(uint8);
@@ -21,7 +24,9 @@ public:
     uint8 xor_(uint8);
     void cp(uint8);
     void inc(uint8);
+    void inc16(uint16);
     void dec(uint8);
+    void dec16(uint16);
     void ccf(void);
     void scf(void);
     void rra(void);

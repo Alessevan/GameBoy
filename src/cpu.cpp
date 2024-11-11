@@ -1,13 +1,30 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "cpu.hpp"
 #define TODO printf("TO BE IMPLEMENTED\n");
 
 CPU::CPU(void) {
     this->registers = Registers();
+    this->bus = MemoryBus();
     this->pc = 0;
 }
 
-void CPU::execute(Instruction instruction) {
+void CPU::step(void) {
+    uint8 instruction_byte = this->bus.read_byte(this->pc);
+    bool prefixed = instruction_byte == 0xCB;
+    if (prefixed) {
+        instruction_byte = this->bus.read_byte(this->pc + 1);
+    }
+
+    Instruction instruction = Instruction::from_byte(instruction_byte, prefixed);
+    if (instruction.getId() == INSTR_ERR) {
+        exit(-1);
+    }
+
+    this->pc = this->execute(instruction);
+}
+
+uint16 CPU::execute(Instruction instruction) {
     switch (instruction.getId()) {
     case INSTR_NOP: { break; }
     case INSTR_ADD: {
@@ -23,6 +40,14 @@ void CPU::execute(Instruction instruction) {
         TargetRegister reg = ((AddhlInstructionData&) data).getTarget();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->addhl(val);
+        break;
+    }
+
+    case INSTR_ADDHL16: {
+        InstructionData data = instruction.getData();
+        Target16Register reg = ((Addhl16InstructionData&) data).get_target();
+        uint8 val = *((&this->registers.af) + reg);
+        this->registers.hl = this->addhl16(val);
         break;
     }
 
@@ -89,10 +114,24 @@ void CPU::execute(Instruction instruction) {
         break;
     }
 
+    case INSTR_INC16: {
+        InstructionData data = instruction.getData();
+        Target16Register reg = ((Inc16InstructionData&) data).get_target();
+        this->inc16(reg);
+        break;
+    }
+
     case INSTR_DEC: {
         InstructionData data = instruction.getData();
         TargetRegister reg = ((DecInstructionData&) data).getTarget();
         this->dec(reg);
+        break;
+    }
+
+    case INSTR_DEC16: {
+        InstructionData data = instruction.getData();
+        Target16Register reg = ((Dec16InstructionData&) data).get_target();
+        this->dec16(reg);
         break;
     }
 
@@ -210,7 +249,12 @@ void CPU::execute(Instruction instruction) {
         this->swap(reg);
         break;
     }
+
+    case INSTR_ERR: {
+        exit(-2);
     }
+    };
+    return this->pc + 1;
 }
 
 uint8 CPU::add(uint8 value) {
@@ -221,12 +265,21 @@ uint8 CPU::add(uint8 value) {
     this->registers.f.H = (this->registers.a & 0xF) + (value & 0xF) > 0xF;
     return new_val;
 }
-
 uint8 CPU::addhl(uint8 value) {
     uint8 val = this->add(value);
     this->registers.set_hl(this->registers.get_hl() + value);
     return val;
 }
+
+uint16 CPU::addhl16(uint16 value) {
+    uint16 new_val = this->registers.hl + value;
+    this->registers.f.C = new_val < this->registers.hl && new_val < value;
+    this->registers.f.Z = new_val == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = (this->registers.hl & 0xFF) + (value & 0xFF) > 0xF;
+    return new_val;
+}
+
 
 uint8 CPU::adc(uint8 value) {
     uint16 new_val = (uint16) this->registers.a + (uint16) value + (uint16) this->registers.f.C;
@@ -294,6 +347,11 @@ void CPU::inc(uint8 reg) {
     this->registers.f.H = (this->registers.a & 0xF) + 1 > 0xF;
 }
 
+void CPU::inc16(uint16 reg) {
+    uint16 *reg_ptr = &this->registers.af + reg;
+    ++*reg_ptr;
+}
+
 void CPU::dec(uint8 reg) {
     uint8 *reg_ptr = &this->registers.a + reg;
     uint8 old_val = *reg_ptr;
@@ -301,6 +359,11 @@ void CPU::dec(uint8 reg) {
     this->registers.f.Z = *reg_ptr == 0;
     this->registers.f.S = false;
     this->registers.f.H = (*reg_ptr & 0x0F) > (old_val & 0x0F);
+}
+
+void CPU::dec16(uint16 reg) {
+    uint16 *reg_ptr = &this->registers.af + reg;
+    --*reg_ptr;
 }
 
 void CPU::ccf(void) {
