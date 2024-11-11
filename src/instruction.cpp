@@ -31,6 +31,142 @@ Instruction Instruction::from_byte(uint8 byte, bool prefixed) {
 
 Instruction Instruction::from_byte_prefixed(uint8 byte) {
     switch (byte) {
+    case 0x37:
+        return SwapInstruction(A);
+    case 0x30:
+        return SwapInstruction(B);
+    case 0x31:
+        return SwapInstruction(C);
+    case 0x32:
+        return SwapInstruction(D);
+    case 0x33:
+        return SwapInstruction(E);
+    case 0x34:
+        return SwapInstruction(H);
+    case 0x35:
+        return SwapInstruction(L);
+    case 0x36:
+        return SwapInstruction(HL_PTR);
+
+    case 0x07:
+        return RlcInstruction(A);
+    case 0x00:
+        return RlcInstruction(B);
+    case 0x01:
+        return RlcInstruction(C);
+    case 0x02:
+        return RlcInstruction(D);
+    case 0x03:
+        return RlcInstruction(E);
+    case 0x04:
+        return RlcInstruction(H);
+    case 0x05:
+        return RlcInstruction(L);
+    case 0x06:
+        return RlcInstruction(HL_PTR);
+
+    case 0x17:
+        return RlInstruction(A);
+    case 0x10:
+        return RlInstruction(B);
+    case 0x11:
+        return RlInstruction(C);
+    case 0x12:
+        return RlInstruction(D);
+    case 0x13:
+        return RlInstruction(E);
+    case 0x14:
+        return RlInstruction(H);
+    case 0x15:
+        return RlInstruction(L);
+    case 0x16:
+        return RlInstruction(HL_PTR);
+
+    case 0x0F:
+        return RrcInstruction(A);
+    case 0x08:
+        return RrcInstruction(B);
+    case 0x09:
+        return RrcInstruction(C);
+    case 0x0A:
+        return RrcInstruction(D);
+    case 0x0B:
+        return RrcInstruction(E);
+    case 0x0C:
+        return RrcInstruction(H);
+    case 0x0D:
+        return RrcInstruction(L);
+    case 0x0E:
+        return RrcInstruction(HL_PTR);
+
+    case 0x1F:
+        return RrInstruction(A);
+    case 0x18:
+        return RrInstruction(B);
+    case 0x19:
+        return RrInstruction(C);
+    case 0x1A:
+        return RrInstruction(D);
+    case 0x1B:
+        return RrInstruction(E);
+    case 0x1C:
+        return RrInstruction(H);
+    case 0x1D:
+        return RrInstruction(L);
+    case 0x1E:
+        return RrInstruction(HL_PTR);
+
+    case 0x27:
+        return SlaInstruction(A);
+    case 0x20:
+        return SlaInstruction(B);
+    case 0x21:
+        return SlaInstruction(C);
+    case 0x22:
+        return SlaInstruction(D);
+    case 0x23:
+        return SlaInstruction(E);
+    case 0x24:
+        return SlaInstruction(H);
+    case 0x25:
+        return SlaInstruction(L);
+    case 0x26:
+        return SlaInstruction(HL_PTR);
+
+    case 0x2F:
+        return SraInstruction(A);
+    case 0x28:
+        return SraInstruction(B);
+    case 0x29:
+        return SraInstruction(C);
+    case 0x2A:
+        return SraInstruction(D);
+    case 0x2B:
+        return SraInstruction(E);
+    case 0x2C:
+        return SraInstruction(H);
+    case 0x2D:
+        return SraInstruction(L);
+    case 0x2E:
+        return SraInstruction(HL_PTR);
+
+    case 0x3F:
+        return SrlInstruction(A);
+    case 0x38:
+        return SrlInstruction(B);
+    case 0x39:
+        return SrlInstruction(C);
+    case 0x3A:
+        return SrlInstruction(D);
+    case 0x3B:
+        return SrlInstruction(E);
+    case 0x3C:
+        return SrlInstruction(H);
+    case 0x3D:
+        return SrlInstruction(L);
+    case 0x3E:
+        return SrlInstruction(HL_PTR);
+
     default:
         return ErrorInstruction();
     }
@@ -278,4 +414,12 @@ Target16Register Target16InstructionData::get_target(void) {
 
 uint8 TargetBitInstructionData::get_bit_position(void) {
     return this->bit;
+}
+
+JumpDataInstruction::JumpDataInstruction(JumpTest test) {
+    this->test = test;
+}
+
+JumpTest JumpDataInstruction::get_test(void) {
+    return this->test;
 }

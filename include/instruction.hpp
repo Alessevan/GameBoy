@@ -35,6 +35,7 @@ enum InstructionId {
     INSTR_SRA,
     INSTR_SLA,
     INSTR_SWAP,
+    INSTR_JUMP,
     INSTR_ERR = 0xFFFF
 };
 
@@ -515,4 +516,28 @@ class SwapInstructionData : public TargetInstructionData {
 class SwapInstruction : public Instruction {
 public:
     SwapInstruction(TargetRegister reg) : Instruction(INSTR_SWAP, SwapInstructionData(reg)) {}
+};
+
+/**
+ * JUMP Instruction
+ */
+enum JumpTest {
+    NOT_ZERO,
+    ZERO,
+    NOT_CARRY,
+    CARRY,
+    ALWAYS
+};
+
+class JumpDataInstruction : public InstructionData {
+    JumpTest test;
+    JumpDataInstruction(JumpTest);
+public:
+    JumpTest get_test(void);
+    friend class JumpInstruction;
+};
+
+class JumpInstruction : public Instruction {
+public:
+    JumpInstruction(JumpDataInstruction data) : Instruction(INSTR_JUMP, data) {}
 };
