@@ -34,10 +34,21 @@ void CPU::execute(Instruction instruction) {
         break;
     }
 
-    case INSTR_SUB:
-    case INSTR_SBC:
-        TODO;
+    case INSTR_SUB: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((SubInstructionData&) data).getTarget();
+        uint8 val = *((&this->registers.a) + reg);
+        this->registers.a = this->sub(val);
         break;
+    }
+        
+    case INSTR_SBC: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((SbcInstructionData&) data).getTarget();
+        uint8 val = *((&this->registers.a) + reg);
+        this->registers.a = this->sub(val);
+        break;
+    }
 
     case INSTR_AND: {
         InstructionData data = instruction.getData();
@@ -63,7 +74,13 @@ void CPU::execute(Instruction instruction) {
         break;
     }
 
-    case INSTR_CP:
+    case INSTR_CP: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((CpInstructionData&) data).getTarget();
+        uint8 val = *((&this->registers.a) + reg);
+        this->cp(val);
+        break;
+    }
     case INSTR_INC:
     case INSTR_DEC:
         TODO;
@@ -104,18 +121,78 @@ void CPU::execute(Instruction instruction) {
         break;
     }
 
-    case INSTR_BIT:
-    case INSTR_RESET:
-    case INSTR_SET:
-    case INSTR_SRL:
-    case INSTR_RR:
-    case INSTR_RL:
-    case INSTR_RRC:
-    case INSTR_RRL:
-    case INSTR_SRA:
-    case INSTR_SLA:
-        TODO;
+    case INSTR_BIT: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((BitInstructionData&) data).getTarget();
+        uint8 bit = ((BitInstructionData&) data).get_bit_position();
+        this->bit(reg, bit);
         break;
+    }
+
+    case INSTR_RESET: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((ResetInstructionData&) data).getTarget();
+        uint8 bit = ((ResetInstructionData&) data).get_bit_position();
+        this->reset(reg, bit);
+        break;
+    }
+
+    case INSTR_SET: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((SetInstructionData&) data).getTarget();
+        uint8 bit = ((SetInstructionData&) data).get_bit_position();
+        this->set(reg, bit);
+        break;
+    }
+
+    case INSTR_SRL: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((SrlInstructionData&) data).getTarget();
+        this->srl(reg);
+        break;
+    }
+
+    case INSTR_RR: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((RrInstructionData&) data).getTarget();
+        this->rr(reg);
+        break;
+    }
+       
+    case INSTR_RL: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((RlInstructionData&) data).getTarget();
+        this->rl(reg);
+        break;
+    }
+
+    case INSTR_RRC: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((RrcInstructionData&) data).getTarget();
+        this->rrc(reg);
+        break;
+    }
+
+    case INSTR_RLC: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((RlcInstructionData&) data).getTarget();
+        this->rlc(reg);
+        break;
+    }
+
+    case INSTR_SRA: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((SraInstructionData&) data).getTarget();
+        this->sra(reg);
+        break;
+    }
+
+    case INSTR_SLA: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((SlaInstructionData&) data).getTarget();
+        this->sla(reg);
+        break;
+    }
 
     case INSTR_SWAP: {
         InstructionData data = instruction.getData();
@@ -146,7 +223,7 @@ uint8 CPU::adc(uint8 value) {
     this->registers.f.C = new_val > 0xFF;
     this->registers.f.Z = (new_val & 0xFF) == 0;
     this->registers.f.S = false;
-    this->registers.f.H = ~((uint16) this->registers.a ^ (uint16) value) & ((uint16) this->registers.a ^ new_val);
+    this->registers.f.H = ((this->registers.a ^ value ^ new_val) & 0x10) > 0;
     return (uint8) (new_val & 0xFF);
 }
 
@@ -154,9 +231,18 @@ uint8 CPU::sub(uint8 value) {
     uint8 sub_val = this->registers.a - value;
     this->registers.f.Z = sub_val == 0;
     this->registers.f.S = true;
-    this->registers.f.H = true;
-    this->registers.f.C = false;
+    this->registers.f.H = (sub_val & 0x0F) > (this->registers.a & 0x0F);
+    this->registers.f.C = sub_val > this->registers.a;
     return sub_val;
+}
+
+uint8 CPU::sbc(uint8 value) {
+    uint8 sbc_val = this->registers.a - value - this->registers.f.C;
+    this->registers.f.Z = sbc_val == 0;
+    this->registers.f.S = true;
+    this->registers.f.H = (sbc_val & 0x0F) > (this->registers.a & 0x0F);
+    this->registers.f.C = sbc_val > this->registers.a;
+    return sbc_val;
 }
 
 uint8 CPU::and_(uint8 value) {
@@ -214,7 +300,7 @@ void CPU::rra(void) {
 }
 
 void CPU::rla(void) {
-    uint8 bit = this->registers.a & 0x80;
+    uint8 bit = (this->registers.a & 0x80) >> 7;
     this->registers.a <<= 1;
     this->registers.a &= ~(0b1);
     this->registers.a |= (this->registers.f.C ? 1 : 0);
@@ -236,7 +322,7 @@ void CPU::rrca(void) {
 }
 
 void CPU::rlca(void) {
-    uint8 bit = this->registers.a & 0x80;
+    uint8 bit = (this->registers.a & 0x80) >> 7;
     this->registers.a <<= 1;
     this->registers.a &= ~(0b1);
     this->registers.a |= bit;
@@ -250,13 +336,102 @@ void CPU::cpl(void) {
     this->registers.a = ~this->registers.a;
 }
 
+void CPU::bit(uint8 reg, uint8 b) {
+    this->registers.f.Z = *((&this->registers.a) + reg) & (0b1 << b);
+    this->registers.f.S = false;
+    this->registers.f.H = true;
+}
+
+void CPU::reset(uint8 reg, uint8 b) {
+    *((&this->registers.a) + reg) &= ~(0b1 << b);
+}
+
+void CPU::set(uint8 reg, uint8 b) {
+    *((&this->registers.a) + reg) |= (0b1 << b);
+}
+
+void CPU::srl(uint8 reg) {
+    *((&this->registers.a) + reg) >>= 1;
+    *((&this->registers.a) + reg) &= ~0x80;
+}
+
+void CPU::rr(uint8 reg) {
+    uint8 *reg_ptr = &this->registers.a + reg;
+    uint8 bit = *reg_ptr & 0b1;
+    *reg_ptr >>= 1;
+    *reg_ptr &= ~(0x80);
+    *reg_ptr |= (this->registers.f.C ? 1 : 0) << 7;
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = false;
+    this->registers.f.C = bit == 1;
+}
+
+void CPU::rl(uint8 reg) {
+    uint8 *reg_ptr = (&this->registers.a) + reg;
+    uint8 bit = (*reg_ptr & 0x80) >> 7;
+    *reg_ptr <<= 1;
+    *reg_ptr &= ~(0x80);
+    *reg_ptr |= (this->registers.f.C ? 1 : 0);
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = false;
+    this->registers.f.C = bit == 1;
+}
+
+void CPU::rrc(uint8 reg) {
+    uint8 *reg_ptr = &this->registers.a + reg;
+    uint8 bit = *reg_ptr & 0b1;
+    *reg_ptr >>= 1;
+    *reg_ptr &= ~(0x80);
+    *reg_ptr |= bit << 7;
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = false;
+    this->registers.f.C = bit == 1;
+}
+
+void CPU::rlc(uint8 reg) {
+    uint8 *reg_ptr = &this->registers.a + reg;
+    uint8 bit = (*reg_ptr & 0x80) >> 7;
+    *reg_ptr <<= 1;
+    *reg_ptr &= ~(0b1);
+    *reg_ptr |= bit;
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = false;
+    this->registers.f.C = bit == 1;
+}
+
+void CPU::sra(uint8 reg) {
+    uint8 *reg_ptr = &this->registers.a + reg;
+    uint8 bit = *reg_ptr & 0b1;
+    *reg_ptr >>= 1;
+    *reg_ptr |= (*reg_ptr & 0x7F) << 7;
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = false;
+    this->registers.f.C = bit == 1;
+}
+
+void CPU::sla(uint8 reg) {
+    uint8 *reg_ptr = &this->registers.a + reg;
+    uint8 bit = (*reg_ptr & 0x80) >> 7;
+    *reg_ptr <<= 1;
+    *reg_ptr |= bit << 7;
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = false;
+    this->registers.f.C = bit == 1;
+}
+
 void CPU::swap(uint8 reg) {
     uint8 *reg_ptr = (&this->registers.a) + reg;
     uint8 upper = (*reg_ptr) >> 4;
     *reg_ptr <<= 4;
     *reg_ptr |= upper;
     this->registers.f.Z = *reg_ptr == 0;
-    this->registers.f.S =false;
+    this->registers.f.S = false;
     this->registers.f.H = false;
     this->registers.f.C = false;
 }

@@ -16,3 +16,7 @@ InstructionData Instruction::getData(void) {
 TargetRegister TargetInstructionData::getTarget(void) {
     return this->target;
 }
+
+uint8 TargetBitInstructionData::get_bit_position(void) {
+    return this->bit;
+}

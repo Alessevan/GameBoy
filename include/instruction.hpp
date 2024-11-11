@@ -1,4 +1,5 @@
 #pragma once
+#include "integers.hpp"
 
 enum InstructionId {
     INSTR_NOP,
@@ -27,7 +28,7 @@ enum InstructionId {
     INSTR_RR,
     INSTR_RL,
     INSTR_RRC,
-    INSTR_RRL,
+    INSTR_RLC,
     INSTR_SRA,
     INSTR_SLA,
     INSTR_SWAP
@@ -39,12 +40,12 @@ class InstructionData {
 
 enum TargetRegister {
     A = 0x00,
-    B = 0x01,
-    C = 0x02,
-    D = 0x03,
-    E = 0x04,
-    H = 0x05,
-    L = 0x06
+    B = 0x02,
+    C = 0x01,
+    D = 0x04,
+    E = 0x03,
+    H = 0x06,
+    L = 0x05
 };
 
 class TargetInstructionData : public InstructionData {
@@ -109,6 +110,32 @@ public:
     AdcInstruction(TargetRegister reg) : Instruction(INSTR_ADC, AdcInstructionData(reg)) {}
 };
 
+/**
+ * SUB Instruction
+ */
+class SubInstructionData : public TargetInstructionData {
+    SubInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class SubInstruction;
+};
+
+class SubInstruction : public Instruction {
+public:
+    SubInstruction(TargetRegister reg) : Instruction(INSTR_SUB, SubInstructionData(reg)) {}
+};
+
+/**
+ * SBC Instruction
+ */
+class SbcInstructionData : public TargetInstructionData {
+    SbcInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class SbcInstruction;
+};
+
+class SbcInstruction : public Instruction {
+public:
+    SbcInstruction(TargetRegister reg) : Instruction(INSTR_SBC, SbcInstructionData(reg)) {}
+};
+
 
 /**
  * AND Instruction
@@ -149,7 +176,21 @@ class XorInstructionData : public TargetInstructionData {
 class XorInstruction : public Instruction {
 public:
     XorInstruction(TargetRegister reg) : Instruction(INSTR_XOR, XorInstructionData(reg)) {}
-}; 
+};
+
+
+/**
+ * CP Instruction
+ */
+class CpInstructionData : public TargetInstructionData {
+    CpInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class CpInstruction;
+};
+
+class CpInstruction : public Instruction {
+public:
+    CpInstruction(TargetRegister reg) : Instruction(INSTR_CP, CpInstructionData(reg)) {}
+};
 
 /**
  * CPL Instruction
@@ -157,6 +198,158 @@ public:
 class CplInstruction : public Instruction {
 public:
     CplInstruction(void): Instruction(INSTR_CPL, NoInstructionData()) {}
+};
+
+class TargetBitInstructionData : public TargetInstructionData {
+protected:
+    uint8 bit;
+    
+    TargetBitInstructionData(TargetRegister target, uint8 bit) : TargetInstructionData(target) {
+        this->bit = bit;
+    }
+
+public:
+    uint8 get_bit_position(void);
+};
+
+/**
+ * BIT Instruction
+ */
+class BitInstructionData : public TargetBitInstructionData {
+    
+    BitInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
+    friend class BitInstruction;
+};
+
+class BitInstruction : public Instruction {
+public:
+    BitInstruction(TargetRegister reg, uint8 bit) : Instruction(INSTR_BIT, BitInstructionData(reg, bit)) {}
+};
+
+
+/**
+ * RESET Instruction
+ */
+class ResetInstructionData : public TargetBitInstructionData {
+    
+    ResetInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
+    friend class ResetInstruction;
+};
+
+class ResetInstruction : public Instruction {
+public:
+    ResetInstruction(TargetRegister reg, uint8 bit) : Instruction(INSTR_RESET, ResetInstructionData(reg, bit)) {}
+};
+
+/**
+ * RESET Instruction
+ */
+class SetInstructionData : public TargetBitInstructionData {
+    
+    SetInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
+    friend class SetInstruction;
+};
+
+class SetInstruction : public Instruction {
+public:
+    SetInstruction(TargetRegister reg, uint8 bit) : Instruction(INSTR_SET, SetInstructionData(reg, bit)) {}
+};
+
+
+/**
+ * SRL Instruction
+ */
+class SrlInstructionData : public TargetInstructionData {
+    SrlInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class SrlInstruction;
+};
+
+class SrlInstruction : public Instruction {
+public:
+    SrlInstruction(TargetRegister reg) : Instruction(INSTR_SRL, SrlInstructionData(reg)) {}
+};
+
+/**
+ * RR Instruction
+ */
+class RrInstructionData : public TargetInstructionData {
+    RrInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class RrInstruction;
+};
+
+class RrInstruction : public Instruction {
+public:
+    RrInstruction(TargetRegister reg) : Instruction(INSTR_RR, RrInstructionData(reg)) {}
+};
+
+
+
+/**
+ * RL Instruction
+ */
+class RlInstructionData : public TargetInstructionData {
+    RlInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class RlInstruction;
+};
+
+class RlInstruction : public Instruction {
+public:
+    RlInstruction(TargetRegister reg) : Instruction(INSTR_RL, RlInstructionData(reg)) {}
+};
+
+/**
+ * RRC Instruction
+ */
+class RrcInstructionData : public TargetInstructionData {
+    RrcInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class RrcInstruction;
+};
+
+class RrcInstruction : public Instruction {
+public:
+    RrcInstruction(TargetRegister reg) : Instruction(INSTR_RRC, RrcInstructionData(reg)) {}
+};
+
+
+/**
+ * RLC Instruction
+ */
+class RlcInstructionData : public TargetInstructionData {
+    RlcInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class RlcInstruction;
+};
+
+class RlcInstruction : public Instruction {
+public:
+    RlcInstruction(TargetRegister reg) : Instruction(INSTR_RLC, RlcInstructionData(reg)) {}
+};
+
+
+/**
+ * SRA Instruction
+ */
+class SraInstructionData : public TargetInstructionData {
+    SraInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class SraInstruction;
+};
+
+class SraInstruction : public Instruction {
+public:
+    SraInstruction(TargetRegister reg) : Instruction(INSTR_SRA, SraInstructionData(reg)) {}
+};
+
+
+/**
+ * SLA Instruction
+ */
+class SlaInstructionData : public TargetInstructionData {
+    SlaInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class SlaInstruction;
+};
+
+class SlaInstruction : public Instruction {
+public:
+    SlaInstruction(TargetRegister reg) : Instruction(INSTR_SLA, SlaInstructionData(reg)) {}
 };
 
 /**
