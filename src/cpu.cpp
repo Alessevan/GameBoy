@@ -81,10 +81,20 @@ void CPU::execute(Instruction instruction) {
         this->cp(val);
         break;
     }
-    case INSTR_INC:
-    case INSTR_DEC:
-        TODO;
+
+    case INSTR_INC: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((IncInstructionData&) data).getTarget();
+        this->inc(reg);
         break;
+    }
+
+    case INSTR_DEC: {
+        InstructionData data = instruction.getData();
+        TargetRegister reg = ((DecInstructionData&) data).getTarget();
+        this->dec(reg);
+        break;
+    }
 
     case INSTR_CCF: {
         this->ccf();
