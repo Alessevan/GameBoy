@@ -192,6 +192,33 @@ public:
     CpInstruction(TargetRegister reg) : Instruction(INSTR_CP, CpInstructionData(reg)) {}
 };
 
+
+/**
+ * Inc Instruction
+ */
+class IncInstructionData : public TargetInstructionData {
+    IncInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class IncInstruction;
+};
+
+class IncInstruction : public Instruction {
+public:
+    IncInstruction(TargetRegister reg) : Instruction(INSTR_INC, IncInstructionData(reg)) {}
+};
+
+/**
+ * Dec Instruction
+ */
+class DecInstructionData : public TargetInstructionData {
+    DecInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    friend class DecInstruction;
+};
+
+class DecInstruction : public Instruction {
+public:
+    DecInstruction(TargetRegister reg) : Instruction(INSTR_DEC, DecInstructionData(reg)) {}
+};
+
 /**
  * CPL Instruction
  */

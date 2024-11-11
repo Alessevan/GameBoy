@@ -20,6 +20,8 @@ public:
     uint8 or_(uint8);
     uint8 xor_(uint8);
     void cp(uint8);
+    void inc(uint8);
+    void dec(uint8);
     void ccf(void);
     void scf(void);
     void rra(void);

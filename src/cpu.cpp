@@ -276,6 +276,23 @@ void CPU::cp(uint8 value) {
     this->sub(value);
 }
 
+void CPU::inc(uint8 reg) {
+    uint8 *reg_ptr = &this->registers.a + reg;
+    ++*reg_ptr;
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = (this->registers.a & 0xF) + 1 > 0xF;
+}
+
+void CPU::dec(uint8 reg) {
+    uint8 *reg_ptr = &this->registers.a + reg;
+    uint8 old_val = *reg_ptr;
+    --*reg_ptr;
+    this->registers.f.Z = *reg_ptr == 0;
+    this->registers.f.S = false;
+    this->registers.f.H = (*reg_ptr & 0x0F) > (old_val & 0x0F);
+}
+
 void CPU::ccf(void) {
     this->registers.f.S = false;
     this->registers.f.H = false;
