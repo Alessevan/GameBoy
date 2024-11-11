@@ -35,7 +35,9 @@ enum InstructionId {
     INSTR_SRA,
     INSTR_SLA,
     INSTR_SWAP,
-    INSTR_JUMP,
+    INSTR_JP,
+    INSTR_JR,
+    INSTR_JPI,
     INSTR_ERR = 0xFFFF
 };
 
@@ -537,7 +539,17 @@ public:
     friend class JumpInstruction;
 };
 
-class JumpInstruction : public Instruction {
+class JpInstruction : public Instruction {
 public:
-    JumpInstruction(JumpDataInstruction data) : Instruction(INSTR_JUMP, data) {}
+    JpInstruction(JumpDataInstruction data) : Instruction(INSTR_JP, data) {}
+};
+
+class JrInstruction : public Instruction {
+public:
+    JrInstruction(JumpDataInstruction data) : Instruction(INSTR_JR, data) {}
+};
+
+class JpiInstruction : public Instruction {
+public:
+    JpiInstruction() : Instruction(INSTR_JPI, NoInstructionData()) {}
 };

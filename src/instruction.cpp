@@ -399,6 +399,15 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return RrcaInstruction();
     case 0x1F:
         return RraInstruction();
+
+    case 0x20:
+        return JrInstruction(NOT_ZERO);
+    case 0x28:
+        return JrInstruction(ZERO);
+    case 0x30:
+        return JrInstruction(NOT_CARRY);
+    case 0x38:
+        return JrInstruction(CARRY);
         
     case 0x00:
         return NoInstruction();

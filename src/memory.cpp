@@ -8,3 +8,7 @@ MemoryBus::MemoryBus(void) {
 uint8 MemoryBus::read_byte(uint16 address) {
     return *(this->memory + address);
 }
+
+void MemoryBus::write_byte(uint16 address, uint8 value) {
+    *(this->memory + address) = value;
+}

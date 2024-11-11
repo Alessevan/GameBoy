@@ -250,7 +250,7 @@ uint16 CPU::execute(Instruction instruction) {
         break;
     }
 
-    case INSTR_JUMP: {
+    case INSTR_JP: {
         InstructionData data = instruction.getData();
         bool should_jump = false;
         switch (((JumpDataInstruction&) data).get_test()) {
@@ -275,6 +275,32 @@ uint16 CPU::execute(Instruction instruction) {
         uint16 least_sig_byte = (uint16) this->bus.read_byte(this->pc + 1);
         uint16 most_sig_byte = (uint16) this->bus.read_byte(this->pc + 2);
         return (most_sig_byte << 8) | least_sig_byte;
+    }
+
+    case INSTR_JR: {
+        InstructionData data = instruction.getData();
+        bool should_jump = false;
+        switch (((JumpDataInstruction&) data).get_test()) {
+        case NOT_ZERO:
+            should_jump = !this->registers.f.Z;
+            break;
+        case ZERO:
+            should_jump = this->registers.f.Z;
+            break;
+        case NOT_CARRY:
+            should_jump = !this->registers.f.C;
+            break;
+        case CARRY:
+            should_jump = this->registers.f.C;
+            break;
+        case ALWAYS:
+            should_jump = true;
+        }
+        if (!should_jump)
+            return this->pc + 3;
+        // Little Endian
+        uint16 n = (uint16) this->bus.read_byte(this->pc + 1);
+        return this->pc + n;
     }
 
     case INSTR_ERR: {
