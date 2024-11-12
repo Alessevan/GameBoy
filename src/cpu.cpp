@@ -303,6 +303,10 @@ uint16 CPU::execute(Instruction instruction) {
         return this->pc + n;
     }
 
+    case INSTR_JPI: {
+        return this->registers.hl;
+    }
+
     case INSTR_ERR: {
         exit(-2);
     }
