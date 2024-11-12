@@ -17,7 +17,7 @@ void CPU::step(void) {
     }
 
     Instruction instruction = Instruction::from_byte(instruction_byte, prefixed);
-    if (instruction.getId() == INSTR_ERR) {
+    if (instruction.get_id() == INSTR_ERR) {
         exit(-1);
     }
 
@@ -25,26 +25,26 @@ void CPU::step(void) {
 }
 
 uint16 CPU::execute(Instruction instruction) {
-    switch (instruction.getId()) {
+    switch (instruction.get_id()) {
     case INSTR_NOP: { break; }
     case INSTR_ADD: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((AddInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((AddInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->add(val);
         break;
     }
 
     case INSTR_ADDHL: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((AddhlInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((AddhlInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->addhl(val);
         break;
     }
 
     case INSTR_ADDHL16: {
-        InstructionData data = instruction.getData();
+        InstructionData data = instruction.get_data();
         Target16Register reg = ((Addhl16InstructionData&) data).get_target();
         uint8 val = *((&this->registers.af) + reg);
         this->registers.hl = this->addhl16(val);
@@ -52,84 +52,84 @@ uint16 CPU::execute(Instruction instruction) {
     }
 
     case INSTR_ADC: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((AdcInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((AdcInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->adc(val);
         break;
     }
 
     case INSTR_SUB: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((SubInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((SubInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->sub(val);
         break;
     }
-        
+
     case INSTR_SBC: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((SbcInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((SbcInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->sub(val);
         break;
     }
 
     case INSTR_AND: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((AndInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((AndInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->and_(val);
         break;
     }
 
     case INSTR_OR: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((OrInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((OrInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->or_(val);
         break;
     }
 
     case INSTR_XOR: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((XorInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((XorInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->registers.a = this->xor_(val);
         break;
     }
 
     case INSTR_CP: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((CpInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((CpInstructionData&) data).get_target();
         uint8 val = *((&this->registers.a) + reg);
         this->cp(val);
         break;
     }
 
     case INSTR_INC: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((IncInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((IncInstructionData&) data).get_target();
         this->inc(reg);
         break;
     }
 
     case INSTR_INC16: {
-        InstructionData data = instruction.getData();
+        InstructionData data = instruction.get_data();
         Target16Register reg = ((Inc16InstructionData&) data).get_target();
         this->inc16(reg);
         break;
     }
 
     case INSTR_DEC: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((DecInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((DecInstructionData&) data).get_target();
         this->dec(reg);
         break;
     }
 
     case INSTR_DEC16: {
-        InstructionData data = instruction.getData();
+        InstructionData data = instruction.get_data();
         Target16Register reg = ((Dec16InstructionData&) data).get_target();
         this->dec16(reg);
         break;
@@ -171,89 +171,89 @@ uint16 CPU::execute(Instruction instruction) {
     }
 
     case INSTR_BIT: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((BitInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((BitInstructionData&) data).get_target();
         uint8 bit = ((BitInstructionData&) data).get_bit_position();
         this->bit(reg, bit);
         break;
     }
 
     case INSTR_RESET: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((ResetInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((ResetInstructionData&) data).get_target();
         uint8 bit = ((ResetInstructionData&) data).get_bit_position();
         this->reset(reg, bit);
         break;
     }
 
     case INSTR_SET: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((SetInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((SetInstructionData&) data).get_target();
         uint8 bit = ((SetInstructionData&) data).get_bit_position();
         this->set(reg, bit);
         break;
     }
 
     case INSTR_SRL: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((SrlInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((SrlInstructionData&) data).get_target();
         this->srl(reg);
         break;
     }
 
     case INSTR_RR: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((RrInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((RrInstructionData&) data).get_target();
         this->rr(reg);
         break;
     }
-       
+
     case INSTR_RL: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((RlInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((RlInstructionData&) data).get_target();
         this->rl(reg);
         break;
     }
 
     case INSTR_RRC: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((RrcInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((RrcInstructionData&) data).get_target();
         this->rrc(reg);
         break;
     }
 
     case INSTR_RLC: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((RlcInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((RlcInstructionData&) data).get_target();
         this->rlc(reg);
         break;
     }
 
     case INSTR_SRA: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((SraInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((SraInstructionData&) data).get_target();
         this->sra(reg);
         break;
     }
 
     case INSTR_SLA: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((SlaInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((SlaInstructionData&) data).get_target();
         this->sla(reg);
         break;
     }
 
     case INSTR_SWAP: {
-        InstructionData data = instruction.getData();
-        TargetRegister reg = ((SwapInstructionData&) data).getTarget();
+        InstructionData data = instruction.get_data();
+        TargetRegister reg = ((SwapInstructionData&) data).get_target();
         this->swap(reg);
         break;
     }
 
     case INSTR_JP: {
-        InstructionData data = instruction.getData();
+        InstructionData data = instruction.get_data();
         bool should_jump = false;
-        switch (((JumpDataInstruction&) data).get_test()) {
+        switch (((JumpInstructionData&) data).get_test()) {
         case NOT_ZERO:
             should_jump = !this->registers.f.Z;
             break;
@@ -278,9 +278,9 @@ uint16 CPU::execute(Instruction instruction) {
     }
 
     case INSTR_JR: {
-        InstructionData data = instruction.getData();
+        InstructionData data = instruction.get_data();
         bool should_jump = false;
-        switch (((JumpDataInstruction&) data).get_test()) {
+        switch (((JumpInstructionData&) data).get_test()) {
         case NOT_ZERO:
             should_jump = !this->registers.f.Z;
             break;

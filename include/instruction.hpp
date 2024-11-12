@@ -68,7 +68,7 @@ class TargetInstructionData : public InstructionData {
 protected:
     TargetInstructionData(TargetRegister);
 public:
-    TargetRegister getTarget(void);
+    TargetRegister get_target(void);
 
     friend class Instruction;
 };
@@ -93,8 +93,8 @@ class Instruction {
     static Instruction from_byte_not_prefixed(uint8);
 public:
     Instruction(InstructionId, InstructionData);
-    InstructionId getId(void);
-    InstructionData getData(void);
+    InstructionId get_id(void);
+    InstructionData get_data(void);
     static Instruction from_byte(uint8, bool);
     friend class CPU;
 };
@@ -213,7 +213,7 @@ class OrInstructionData : public TargetInstructionData {
 class OrInstruction : public Instruction {
 public:
     OrInstruction(TargetRegister reg) : Instruction(INSTR_OR, OrInstructionData(reg)) {}
-}; 
+};
 
 
 /**
@@ -357,7 +357,7 @@ public:
 class TargetBitInstructionData : public TargetInstructionData {
 protected:
     uint8 bit;
-    
+
     TargetBitInstructionData(TargetRegister target, uint8 bit) : TargetInstructionData(target) {
         this->bit = bit;
     }
@@ -370,7 +370,7 @@ public:
  * BIT Instruction
  */
 class BitInstructionData : public TargetBitInstructionData {
-    
+
     BitInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
     friend class BitInstruction;
 };
@@ -385,7 +385,7 @@ public:
  * RESET Instruction
  */
 class ResetInstructionData : public TargetBitInstructionData {
-    
+
     ResetInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
     friend class ResetInstruction;
 };
@@ -399,7 +399,7 @@ public:
  * RESET Instruction
  */
 class SetInstructionData : public TargetBitInstructionData {
-    
+
     SetInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
     friend class SetInstruction;
 };
@@ -531,22 +531,23 @@ enum JumpTest {
     ALWAYS
 };
 
-class JumpDataInstruction : public InstructionData {
+class JumpInstructionData : public InstructionData {
     JumpTest test;
-    JumpDataInstruction(JumpTest);
+    JumpInstructionData(JumpTest);
 public:
     JumpTest get_test(void);
-    friend class JumpInstruction;
+    friend class JpInstruction;
+    friend class JrInstruction;
 };
 
 class JpInstruction : public Instruction {
 public:
-    JpInstruction(JumpDataInstruction data) : Instruction(INSTR_JP, data) {}
+    JpInstruction(JumpTest test) : Instruction(INSTR_JP, JumpInstructionData(test)) {}
 };
 
 class JrInstruction : public Instruction {
 public:
-    JrInstruction(JumpDataInstruction data) : Instruction(INSTR_JR, data) {}
+    JrInstruction(JumpTest test) : Instruction(INSTR_JR, JumpInstructionData(test)) {}
 };
 
 class JpiInstruction : public Instruction {

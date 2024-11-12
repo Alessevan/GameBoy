@@ -13,15 +13,15 @@ Target16InstructionData::Target16InstructionData(Target16Register target) {
     this->target = target;
 }
 
-InstructionId Instruction::getId(void) {
+InstructionId Instruction::get_id(void) {
     return this->id;
 }
 
-InstructionData Instruction::getData(void) {
+InstructionData Instruction::get_data(void) {
     return this->data;
 }
 
-TargetRegister TargetInstructionData::getTarget(void) {
+TargetRegister TargetInstructionData::get_target(void) {
     return this->target;
 }
 
@@ -264,7 +264,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
     case 0xA6:
         return AndInstruction(HL_PTR);
         // TODO: AND # E6
-        
+
     case 0xB7:
         return OrInstruction(A);
     case 0xB0:
@@ -282,7 +282,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
     case 0xB6:
         return OrInstruction(HL_PTR);
         // TODO: OR # F6
-        
+
     case 0xAF:
         return XorInstruction(A);
     case 0xA8:
@@ -300,7 +300,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
     case 0xAE:
         return XorInstruction(HL_PTR);
         // TODO: XOR # EE
-        
+
     case 0xBF:
         return CpInstruction(A);
     case 0xB8:
@@ -318,7 +318,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
     case 0xBE:
         return CpInstruction(HL_PTR);
         // TODO: CP # FE
-        
+
     case 0x3C:
         return IncInstruction(A);
     case 0x04:
@@ -335,7 +335,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return IncInstruction(L);
     case 0x34:
         return IncInstruction(HL_PTR);
-        
+
     case 0x3D:
         return DecInstruction(A);
     case 0x05:
@@ -362,7 +362,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
     case 0x39:
         return Addhl16Instruction(SP);
         // TODO: ADDSP
-        
+
     case 0x03:
         return Inc16Instruction(BC);
     case 0x13:
@@ -371,7 +371,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return Inc16Instruction(HL);
     case 0x33:
         return Inc16Instruction(SP);
-        
+
     case 0x0B:
         return Dec16Instruction(BC);
     case 0x1B:
@@ -408,7 +408,7 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return JrInstruction(NOT_CARRY);
     case 0x38:
         return JrInstruction(CARRY);
-        
+
     case 0x00:
         return NoInstruction();
     default:
@@ -425,10 +425,10 @@ uint8 TargetBitInstructionData::get_bit_position(void) {
     return this->bit;
 }
 
-JumpDataInstruction::JumpDataInstruction(JumpTest test) {
+JumpInstructionData::JumpInstructionData(JumpTest test) {
     this->test = test;
 }
 
-JumpTest JumpDataInstruction::get_test(void) {
+JumpTest JumpInstructionData::get_test(void) {
     return this->test;
 }
