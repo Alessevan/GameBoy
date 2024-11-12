@@ -38,6 +38,8 @@ enum InstructionId {
     INSTR_JP,
     INSTR_JR,
     INSTR_JPI,
+    INSTR_LOAD,
+    INSTR_LOAD16,
     INSTR_ERR = 0xFFFF
 };
 
@@ -53,6 +55,7 @@ enum TargetRegister {
     E = 0x03,
     H = 0x06,
     L = 0x05,
+    IMMEDIATE = 0xFE,
     HL_PTR = 0xFF
 };
 
@@ -369,44 +372,44 @@ public:
 /**
  * BIT Instruction
  */
-class BitInstructionData : public TargetBitInstructionData {
+class BitInstructionData : public TargetInstructionData {
 
-    BitInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
+    BitInstructionData(TargetRegister target) : TargetInstructionData(target) {}
     friend class BitInstruction;
 };
 
 class BitInstruction : public Instruction {
 public:
-    BitInstruction(TargetRegister reg, uint8 bit) : Instruction(INSTR_BIT, BitInstructionData(reg, bit)) {}
+    BitInstruction(TargetRegister reg) : Instruction(INSTR_BIT, BitInstructionData(reg)) {}
 };
 
 
 /**
  * RESET Instruction
  */
-class ResetInstructionData : public TargetBitInstructionData {
+class ResetInstructionData : public TargetInstructionData {
 
-    ResetInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
+    ResetInstructionData(TargetRegister target) : TargetInstructionData(target) {}
     friend class ResetInstruction;
 };
 
 class ResetInstruction : public Instruction {
 public:
-    ResetInstruction(TargetRegister reg, uint8 bit) : Instruction(INSTR_RESET, ResetInstructionData(reg, bit)) {}
+    ResetInstruction(TargetRegister reg) : Instruction(INSTR_RESET, ResetInstructionData(reg)) {}
 };
 
 /**
  * RESET Instruction
  */
-class SetInstructionData : public TargetBitInstructionData {
+class SetInstructionData : public TargetInstructionData {
 
-    SetInstructionData(TargetRegister target, uint8 bit) : TargetBitInstructionData(target, bit) {}
+    SetInstructionData(TargetRegister target) : TargetInstructionData(target) {}
     friend class SetInstruction;
 };
 
 class SetInstruction : public Instruction {
 public:
-    SetInstruction(TargetRegister reg, uint8 bit) : Instruction(INSTR_SET, SetInstructionData(reg, bit)) {}
+    SetInstruction(TargetRegister reg) : Instruction(INSTR_SET, SetInstructionData(reg)) {}
 };
 
 
@@ -553,4 +556,91 @@ public:
 class JpiInstruction : public Instruction {
 public:
     JpiInstruction() : Instruction(INSTR_JPI, NoInstructionData()) {}
+};
+
+
+/**
+ * LOAD
+ */
+enum LoadTarget {
+    LDT_A,
+    LDT_B,
+    LDT_C,
+    LDT_C_PTR,
+    LDT_D,
+    LDT_E,
+    LDT_H,
+    LDT_L,
+    LDT_BC_PTR,
+    LDT_DE_PTR,
+    LDT_HL_PTR,
+    LDT_HL_D_PTR,
+    LDT_HL_I_PTR,
+    LDT_IMMEDIATE_PTR,
+    LDT_IMMEDIATE_BYTE_PTR
+};
+
+enum LoadSource {
+    LDS_A,
+    LDS_B,
+    LDS_C,
+    LDS_C_PTR,
+    LDS_D,
+    LDS_E,
+    LDS_H,
+    LDS_L,
+    LDS_BC_PTR,
+    LDS_DE_PTR,
+    LDS_HL_PTR,
+    LDS_HL_D_PTR,
+    LDS_HL_I_PTR,
+    LDS_IMMEDIATE_VALUE,
+    LDS_IMMEDIATE_PTR,
+    LDS_IMMEDIATE_BYTE_PTR
+};
+
+class LoadInstructionData: public InstructionData {
+    LoadTarget target;
+    LoadSource source;
+    LoadInstructionData(LoadTarget, LoadSource);
+public:
+    LoadTarget get_target(void);
+    LoadSource get_source(void);
+    friend class LoadInstruction;
+};
+
+class LoadInstruction: public Instruction {
+public:
+    LoadInstruction(LoadTarget target, LoadSource source): Instruction(INSTR_LOAD, LoadInstructionData(target, source)) {}
+};
+
+
+enum Load16Target {
+    LDT16_BC,
+    LDT16_DE,
+    LDT16_HL,
+    LDT16_SP,
+    LDT16_IMMEDIATE_PTR
+};
+
+enum Load16Source {
+    LDS16_HL,
+    LDS16_SP,
+    LDS16_IMMEDIATE_SP,
+    LDS16_IMMEDIATE_VALUE,
+};
+
+class Load16InstructionData: public InstructionData {
+    Load16Target target;
+    Load16Source source;
+    Load16InstructionData(Load16Target, Load16Source);
+public:
+    Load16Target get_target(void);
+    Load16Source get_source(void);
+    friend class Load16Instruction;
+};
+
+class Load16Instruction: public Instruction {
+public:
+    Load16Instruction(Load16Target target, Load16Source source): Instruction(INSTR_LOAD16, Load16InstructionData(target, source)) {}
 };

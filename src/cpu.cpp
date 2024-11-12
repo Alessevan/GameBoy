@@ -173,25 +173,25 @@ uint16 CPU::execute(Instruction instruction) {
     case INSTR_BIT: {
         InstructionData data = instruction.get_data();
         TargetRegister reg = ((BitInstructionData&) data).get_target();
-        uint8 bit = ((BitInstructionData&) data).get_bit_position();
+        uint8 bit = this->bus.read_byte(this->pc + 1);
         this->bit(reg, bit);
-        break;
+        return this->pc + 2;
     }
 
     case INSTR_RESET: {
         InstructionData data = instruction.get_data();
         TargetRegister reg = ((ResetInstructionData&) data).get_target();
-        uint8 bit = ((ResetInstructionData&) data).get_bit_position();
+        uint8 bit = this->bus.read_byte(this->pc + 1);
         this->reset(reg, bit);
-        break;
+        return this->pc + 2;
     }
 
     case INSTR_SET: {
         InstructionData data = instruction.get_data();
         TargetRegister reg = ((SetInstructionData&) data).get_target();
-        uint8 bit = ((SetInstructionData&) data).get_bit_position();
+        uint8 bit = this->bus.read_byte(this->pc + 1);
         this->set(reg, bit);
-        break;
+        return this->pc + 2;
     }
 
     case INSTR_SRL: {
@@ -305,6 +305,14 @@ uint16 CPU::execute(Instruction instruction) {
 
     case INSTR_JPI: {
         return this->registers.hl;
+    }
+
+    case INSTR_LOAD: {
+        break;
+    }
+
+    case INSTR_LOAD16: {
+        break;
     }
 
     case INSTR_ERR: {

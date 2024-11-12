@@ -54,7 +54,7 @@ class Registers {
 
 public:
     Registers(void);
-    
+
 
     uint16 get_af(void);
     void set_af(uint16);
