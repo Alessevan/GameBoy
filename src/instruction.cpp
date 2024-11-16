@@ -13,21 +13,6 @@ Target16InstructionData::Target16InstructionData(Target16Register target) {
     this->target = target;
 }
 
-InstructionId Instruction::get_id(void) {
-    return this->id;
-}
-
-InstructionData Instruction::get_data(void) {
-    return this->data;
-}
-
-TargetRegister TargetInstructionData::get_target(void) {
-    return this->target;
-}
-
-Instruction Instruction::from_byte(uint8 byte, bool prefixed) {
-    return prefixed ? from_byte_prefixed(byte) : from_byte_not_prefixed(byte);
-}
 
 NoInstruction::NoInstruction(void) : Instruction(INSTR_NOP, NoInstructionData()) {
 }
@@ -210,6 +195,10 @@ SwapInstructionData::SwapInstructionData(TargetRegister target) : TargetInstruct
 SwapInstruction::SwapInstruction(TargetRegister reg) : Instruction(INSTR_SWAP, SwapInstructionData(reg)) {
 }
 
+JumpInstructionData::JumpInstructionData(JumpTest test) {
+    this->test = test;
+}
+
 JpInstruction::JpInstruction(JumpTest test) : Instruction(INSTR_JP, JumpInstructionData(test)) {
 }
 
@@ -219,10 +208,64 @@ JrInstruction::JrInstruction(JumpTest test) : Instruction(INSTR_JR, JumpInstruct
 JpiInstruction::JpiInstruction(void) : Instruction(INSTR_JPI, NoInstructionData()) {
 }
 
+LoadInstructionData::LoadInstructionData(LoadTarget target, LoadSource source) {
+    this->target = target;
+    this->source = source;
+}
+
 LoadInstruction::LoadInstruction(LoadTarget target, LoadSource source): Instruction(INSTR_LOAD, LoadInstructionData(target, source)) {
 }
 
+Load16InstructionData::Load16InstructionData(Load16Target target, Load16Source source) {
+    this->target = target;
+    this->source = source;
+}
+
 Load16Instruction::Load16Instruction(Load16Target target, Load16Source source): Instruction(INSTR_LOAD16, Load16InstructionData(target, source)) {
+}
+
+InstructionId Instruction::get_id(void) {
+    return this->id;
+}
+
+InstructionData Instruction::get_data(void) {
+    return this->data;
+}
+
+TargetRegister TargetInstructionData::get_target(void) {
+    return this->target;
+}
+
+Instruction Instruction::from_byte(uint8 byte, bool prefixed) {
+    return prefixed ? from_byte_prefixed(byte) : from_byte_not_prefixed(byte);
+}
+
+Target16Register Target16InstructionData::get_target(void) {
+    return this->target;
+}
+
+uint8 TargetBitInstructionData::get_bit_position(void) {
+    return this->bit;
+}
+
+JumpTest JumpInstructionData::get_test(void) {
+    return this->test;
+}
+
+LoadTarget LoadInstructionData::get_target(void) {
+    return this->target;
+}
+
+LoadSource LoadInstructionData::get_source(void) {
+    return this->source;
+}
+
+Load16Target Load16InstructionData::get_target(void) {
+    return this->target;
+}
+
+Load16Source Load16InstructionData::get_source(void) {
+    return this->source;
 }
 
 Instruction Instruction::from_byte_prefixed(uint8 byte) {
@@ -859,47 +902,4 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return ErrorInstruction();
     }
     return ErrorInstruction();
-}
-
-Target16Register Target16InstructionData::get_target(void) {
-    return this->target;
-}
-
-uint8 TargetBitInstructionData::get_bit_position(void) {
-    return this->bit;
-}
-
-JumpInstructionData::JumpInstructionData(JumpTest test) {
-    this->test = test;
-}
-
-JumpTest JumpInstructionData::get_test(void) {
-    return this->test;
-}
-
-LoadInstructionData::LoadInstructionData(LoadTarget target, LoadSource source) {
-    this->target = target;
-    this->source = source;
-}
-
-LoadTarget LoadInstructionData::get_target(void) {
-    return this->target;
-}
-
-LoadSource LoadInstructionData::get_source(void) {
-    return this->source;
-}
-
-
-Load16InstructionData::Load16InstructionData(Load16Target target, Load16Source source) {
-    this->target = target;
-    this->source = source;
-}
-
-Load16Target Load16InstructionData::get_target(void) {
-    return this->target;
-}
-
-Load16Source Load16InstructionData::get_source(void) {
-    return this->source;
 }
