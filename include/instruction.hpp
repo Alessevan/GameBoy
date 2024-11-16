@@ -104,90 +104,90 @@ public:
 
 class NoInstruction : public Instruction {
 public:
-    NoInstruction(void): Instruction(INSTR_NOP, NoInstructionData()) {}
+    NoInstruction(void);
 };
 
 class ErrorInstruction : public Instruction {
 public:
-    ErrorInstruction(void): Instruction(INSTR_ERR, NoInstructionData()) {}
+    ErrorInstruction(void);
 };
 
 /**
  * ADD Instruction
  */
 class AddInstructionData : public TargetInstructionData {
-    AddInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    AddInstructionData(TargetRegister);
     friend class AddInstruction;
 };
 
 class AddInstruction : public Instruction {
 public:
-    AddInstruction(TargetRegister reg) : Instruction(INSTR_ADD, AddInstructionData(reg)) {}
+    AddInstruction(TargetRegister);
 };
 
 /**
  * ADDHL Instruction
  */
 class AddhlInstructionData : public TargetInstructionData {
-    AddhlInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    AddhlInstructionData(TargetRegister);
     friend class AddhlInstruction;
 };
 
 class AddhlInstruction : public Instruction {
 public:
-    AddhlInstruction(TargetRegister reg) : Instruction(INSTR_ADDHL, AddhlInstructionData(reg)) {}
+    AddhlInstruction(TargetRegister);
 };
 
 /**
  * ADDHL Instruction
  */
 class Addhl16InstructionData : public Target16InstructionData {
-    Addhl16InstructionData(Target16Register target) : Target16InstructionData(target) {}
+    Addhl16InstructionData(Target16Register);
     friend class Addhl16Instruction;
 };
 
 class Addhl16Instruction : public Instruction {
 public:
-    Addhl16Instruction(Target16Register reg) : Instruction(INSTR_ADDHL16, Addhl16InstructionData(reg)) {}
+    Addhl16Instruction(Target16Register);
 };
 
 /**
  * ADC Instruction
  */
 class AdcInstructionData : public TargetInstructionData {
-    AdcInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    AdcInstructionData(TargetRegister);
     friend class AdcInstruction;
 };
 
 class AdcInstruction : public Instruction {
 public:
-    AdcInstruction(TargetRegister reg) : Instruction(INSTR_ADC, AdcInstructionData(reg)) {}
+    AdcInstruction(TargetRegister);
 };
 
 /**
  * SUB Instruction
  */
 class SubInstructionData : public TargetInstructionData {
-    SubInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    SubInstructionData(TargetRegister);
     friend class SubInstruction;
 };
 
 class SubInstruction : public Instruction {
 public:
-    SubInstruction(TargetRegister reg) : Instruction(INSTR_SUB, SubInstructionData(reg)) {}
+    SubInstruction(TargetRegister);
 };
 
 /**
  * SBC Instruction
  */
 class SbcInstructionData : public TargetInstructionData {
-    SbcInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    SbcInstructionData(TargetRegister);
     friend class SbcInstruction;
 };
 
 class SbcInstruction : public Instruction {
 public:
-    SbcInstruction(TargetRegister reg) : Instruction(INSTR_SBC, SbcInstructionData(reg)) {}
+    SbcInstruction(TargetRegister);
 };
 
 
@@ -195,13 +195,13 @@ public:
  * AND Instruction
  */
 class AndInstructionData : public TargetInstructionData {
-    AndInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    AndInstructionData(TargetRegister);
     friend class AndInstruction;
 };
 
 class AndInstruction : public Instruction {
 public:
-    AndInstruction(TargetRegister reg) : Instruction(INSTR_AND, AndInstructionData(reg)) {}
+    AndInstruction(TargetRegister);
 };
 
 
@@ -209,13 +209,13 @@ public:
  * OR Instruction
  */
 class OrInstructionData : public TargetInstructionData {
-    OrInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    OrInstructionData(TargetRegister);
     friend class OrInstruction;
 };
 
 class OrInstruction : public Instruction {
 public:
-    OrInstruction(TargetRegister reg) : Instruction(INSTR_OR, OrInstructionData(reg)) {}
+    OrInstruction(TargetRegister);
 };
 
 
@@ -223,13 +223,13 @@ public:
  * XOR Instruction
  */
 class XorInstructionData : public TargetInstructionData {
-    XorInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    XorInstructionData(TargetRegister);
     friend class XorInstruction;
 };
 
 class XorInstruction : public Instruction {
 public:
-    XorInstruction(TargetRegister reg) : Instruction(INSTR_XOR, XorInstructionData(reg)) {}
+    XorInstruction(TargetRegister);
 };
 
 
@@ -237,13 +237,13 @@ public:
  * CP Instruction
  */
 class CpInstructionData : public TargetInstructionData {
-    CpInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    CpInstructionData(TargetRegister);
     friend class CpInstruction;
 };
 
 class CpInstruction : public Instruction {
 public:
-    CpInstruction(TargetRegister reg) : Instruction(INSTR_CP, CpInstructionData(reg)) {}
+    CpInstruction(TargetRegister);
 };
 
 
@@ -251,13 +251,13 @@ public:
  * Inc Instruction
  */
 class IncInstructionData : public TargetInstructionData {
-    IncInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    IncInstructionData(TargetRegister);
     friend class IncInstruction;
 };
 
 class IncInstruction : public Instruction {
 public:
-    IncInstruction(TargetRegister reg) : Instruction(INSTR_INC, IncInstructionData(reg)) {}
+    IncInstruction(TargetRegister);
 };
 
 
@@ -265,39 +265,39 @@ public:
  * Inc16 Instruction
  */
 class Inc16InstructionData : public Target16InstructionData {
-    Inc16InstructionData(Target16Register target) : Target16InstructionData(target) {}
+    Inc16InstructionData(Target16Register);
     friend class Inc16Instruction;
 };
 
 class Inc16Instruction : public Instruction {
 public:
-    Inc16Instruction(Target16Register reg) : Instruction(INSTR_INC16, Inc16InstructionData(reg)) {}
+    Inc16Instruction(Target16Register);
 };
 
 /**
  * Dec Instruction
  */
 class DecInstructionData : public TargetInstructionData {
-    DecInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    DecInstructionData(TargetRegister);
     friend class DecInstruction;
 };
 
 class DecInstruction : public Instruction {
 public:
-    DecInstruction(TargetRegister reg) : Instruction(INSTR_DEC, DecInstructionData(reg)) {}
+    DecInstruction(TargetRegister);
 };
 
 /**
  * DEC16 Instruction
  */
 class Dec16InstructionData : public Target16InstructionData {
-    Dec16InstructionData(Target16Register target) : Target16InstructionData(target) {}
+    Dec16InstructionData(Target16Register);
     friend class Dec16Instruction;
 };
 
 class Dec16Instruction : public Instruction {
 public:
-    Dec16Instruction(Target16Register reg) : Instruction(INSTR_DEC16, Dec16InstructionData(reg)) {}
+    Dec16Instruction(Target16Register);
 };
 
 
@@ -306,7 +306,7 @@ public:
  */
 class CcfInstruction : public Instruction {
 public:
-    CcfInstruction(void): Instruction(INSTR_CCF, NoInstructionData()) {}
+    CcfInstruction(void);
 };
 
 /**
@@ -314,7 +314,7 @@ public:
  */
 class ScfInstruction : public Instruction {
 public:
-    ScfInstruction(void): Instruction(INSTR_SCF, NoInstructionData()) {}
+    ScfInstruction(void);
 };
 
 /**
@@ -322,7 +322,7 @@ public:
  */
 class RraInstruction : public Instruction {
 public:
-    RraInstruction(void): Instruction(INSTR_RRA, NoInstructionData()) {}
+    RraInstruction(void);
 };
 
 /**
@@ -330,7 +330,7 @@ public:
  */
 class RlaInstruction : public Instruction {
 public:
-    RlaInstruction(void): Instruction(INSTR_RLA, NoInstructionData()) {}
+    RlaInstruction(void);
 };
 
 /**
@@ -338,7 +338,7 @@ public:
  */
 class RrcaInstruction : public Instruction {
 public:
-    RrcaInstruction(void): Instruction(INSTR_RRCA, NoInstructionData()) {}
+    RrcaInstruction(void);
 };
 
 /**
@@ -346,7 +346,7 @@ public:
  */
 class RlcaInstruction : public Instruction {
 public:
-    RlcaInstruction(void): Instruction(INSTR_RLCA, NoInstructionData()) {}
+    RlcaInstruction(void);
 };
 
 /**
@@ -354,16 +354,14 @@ public:
  */
 class CplInstruction : public Instruction {
 public:
-    CplInstruction(void): Instruction(INSTR_CPL, NoInstructionData()) {}
+    CplInstruction(void);
 };
 
 class TargetBitInstructionData : public TargetInstructionData {
 protected:
     uint8 bit;
 
-    TargetBitInstructionData(TargetRegister target, uint8 bit) : TargetInstructionData(target) {
-        this->bit = bit;
-    }
+    TargetBitInstructionData(TargetRegister, uint8);
 
 public:
     uint8 get_bit_position(void);
@@ -374,13 +372,13 @@ public:
  */
 class BitInstructionData : public TargetInstructionData {
 
-    BitInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    BitInstructionData(TargetRegister);
     friend class BitInstruction;
 };
 
 class BitInstruction : public Instruction {
 public:
-    BitInstruction(TargetRegister reg) : Instruction(INSTR_BIT, BitInstructionData(reg)) {}
+    BitInstruction(TargetRegister);
 };
 
 
@@ -389,13 +387,13 @@ public:
  */
 class ResetInstructionData : public TargetInstructionData {
 
-    ResetInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    ResetInstructionData(TargetRegister);
     friend class ResetInstruction;
 };
 
 class ResetInstruction : public Instruction {
 public:
-    ResetInstruction(TargetRegister reg) : Instruction(INSTR_RESET, ResetInstructionData(reg)) {}
+    ResetInstruction(TargetRegister);
 };
 
 /**
@@ -403,13 +401,13 @@ public:
  */
 class SetInstructionData : public TargetInstructionData {
 
-    SetInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    SetInstructionData(TargetRegister);
     friend class SetInstruction;
 };
 
 class SetInstruction : public Instruction {
 public:
-    SetInstruction(TargetRegister reg) : Instruction(INSTR_SET, SetInstructionData(reg)) {}
+    SetInstruction(TargetRegister);
 };
 
 
@@ -417,26 +415,26 @@ public:
  * SRL Instruction
  */
 class SrlInstructionData : public TargetInstructionData {
-    SrlInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    SrlInstructionData(TargetRegister);
     friend class SrlInstruction;
 };
 
 class SrlInstruction : public Instruction {
 public:
-    SrlInstruction(TargetRegister reg) : Instruction(INSTR_SRL, SrlInstructionData(reg)) {}
+    SrlInstruction(TargetRegister);
 };
 
 /**
  * RR Instruction
  */
 class RrInstructionData : public TargetInstructionData {
-    RrInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    RrInstructionData(TargetRegister);
     friend class RrInstruction;
 };
 
 class RrInstruction : public Instruction {
 public:
-    RrInstruction(TargetRegister reg) : Instruction(INSTR_RR, RrInstructionData(reg)) {}
+    RrInstruction(TargetRegister);
 };
 
 
@@ -445,26 +443,26 @@ public:
  * RL Instruction
  */
 class RlInstructionData : public TargetInstructionData {
-    RlInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    RlInstructionData(TargetRegister);
     friend class RlInstruction;
 };
 
 class RlInstruction : public Instruction {
 public:
-    RlInstruction(TargetRegister reg) : Instruction(INSTR_RL, RlInstructionData(reg)) {}
+    RlInstruction(TargetRegister);
 };
 
 /**
  * RRC Instruction
  */
 class RrcInstructionData : public TargetInstructionData {
-    RrcInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    RrcInstructionData(TargetRegister);
     friend class RrcInstruction;
 };
 
 class RrcInstruction : public Instruction {
 public:
-    RrcInstruction(TargetRegister reg) : Instruction(INSTR_RRC, RrcInstructionData(reg)) {}
+    RrcInstruction(TargetRegister);
 };
 
 
@@ -472,13 +470,13 @@ public:
  * RLC Instruction
  */
 class RlcInstructionData : public TargetInstructionData {
-    RlcInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    RlcInstructionData(TargetRegister);
     friend class RlcInstruction;
 };
 
 class RlcInstruction : public Instruction {
 public:
-    RlcInstruction(TargetRegister reg) : Instruction(INSTR_RLC, RlcInstructionData(reg)) {}
+    RlcInstruction(TargetRegister);
 };
 
 
@@ -486,13 +484,13 @@ public:
  * SRA Instruction
  */
 class SraInstructionData : public TargetInstructionData {
-    SraInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    SraInstructionData(TargetRegister);
     friend class SraInstruction;
 };
 
 class SraInstruction : public Instruction {
 public:
-    SraInstruction(TargetRegister reg) : Instruction(INSTR_SRA, SraInstructionData(reg)) {}
+    SraInstruction(TargetRegister);
 };
 
 
@@ -500,13 +498,13 @@ public:
  * SLA Instruction
  */
 class SlaInstructionData : public TargetInstructionData {
-    SlaInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    SlaInstructionData(TargetRegister);
     friend class SlaInstruction;
 };
 
 class SlaInstruction : public Instruction {
 public:
-    SlaInstruction(TargetRegister reg) : Instruction(INSTR_SLA, SlaInstructionData(reg)) {}
+    SlaInstruction(TargetRegister);
 };
 
 /**
@@ -514,13 +512,13 @@ public:
  */
 
 class SwapInstructionData : public TargetInstructionData {
-    SwapInstructionData(TargetRegister target) : TargetInstructionData(target) {}
+    SwapInstructionData(TargetRegister);
     friend class SwapInstruction;
 };
 
 class SwapInstruction : public Instruction {
 public:
-    SwapInstruction(TargetRegister reg) : Instruction(INSTR_SWAP, SwapInstructionData(reg)) {}
+    SwapInstruction(TargetRegister);
 };
 
 /**
@@ -545,17 +543,17 @@ public:
 
 class JpInstruction : public Instruction {
 public:
-    JpInstruction(JumpTest test) : Instruction(INSTR_JP, JumpInstructionData(test)) {}
+    JpInstruction(JumpTest);
 };
 
 class JrInstruction : public Instruction {
 public:
-    JrInstruction(JumpTest test) : Instruction(INSTR_JR, JumpInstructionData(test)) {}
+    JrInstruction(JumpTest);
 };
 
 class JpiInstruction : public Instruction {
 public:
-    JpiInstruction() : Instruction(INSTR_JPI, NoInstructionData()) {}
+    JpiInstruction(void);
 };
 
 
@@ -611,7 +609,7 @@ public:
 
 class LoadInstruction: public Instruction {
 public:
-    LoadInstruction(LoadTarget target, LoadSource source): Instruction(INSTR_LOAD, LoadInstructionData(target, source)) {}
+    LoadInstruction(LoadTarget, LoadSource);
 };
 
 
@@ -642,5 +640,5 @@ public:
 
 class Load16Instruction: public Instruction {
 public:
-    Load16Instruction(Load16Target target, Load16Source source): Instruction(INSTR_LOAD16, Load16InstructionData(target, source)) {}
+    Load16Instruction(Load16Target, Load16Source);
 };

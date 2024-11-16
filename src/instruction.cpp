@@ -29,6 +29,202 @@ Instruction Instruction::from_byte(uint8 byte, bool prefixed) {
     return prefixed ? from_byte_prefixed(byte) : from_byte_not_prefixed(byte);
 }
 
+NoInstruction::NoInstruction(void) : Instruction(INSTR_NOP, NoInstructionData()) {
+}
+
+ErrorInstruction::ErrorInstruction(void): Instruction(INSTR_ERR, NoInstructionData()) {
+}
+
+AddInstructionData::AddInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+AddInstruction::AddInstruction(TargetRegister reg) : Instruction(INSTR_ADD, AddInstructionData(reg)) {
+}
+
+AddhlInstructionData::AddhlInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+AddhlInstruction::AddhlInstruction(TargetRegister reg) : Instruction(INSTR_ADDHL, AddhlInstructionData(reg)) {
+}
+
+Addhl16InstructionData::Addhl16InstructionData(Target16Register target) : Target16InstructionData(target) {
+}
+
+Addhl16Instruction::Addhl16Instruction(Target16Register reg) : Instruction(INSTR_ADDHL16, Addhl16InstructionData(reg)) {
+}
+
+AdcInstructionData::AdcInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+AdcInstruction::AdcInstruction(TargetRegister reg) : Instruction(INSTR_ADC, AdcInstructionData(reg)) {
+}
+
+SubInstructionData::SubInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+SubInstruction::SubInstruction(TargetRegister reg) : Instruction(INSTR_SUB, SubInstructionData(reg)) {
+}
+
+SbcInstructionData::SbcInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+SbcInstruction::SbcInstruction(TargetRegister reg) : Instruction(INSTR_SBC, SbcInstructionData(reg)) {
+}
+
+AndInstructionData::AndInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+AndInstruction::AndInstruction(TargetRegister reg) : Instruction(INSTR_AND, AndInstructionData(reg)) {
+}
+
+OrInstructionData::OrInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+OrInstruction::OrInstruction(TargetRegister reg) : Instruction(INSTR_OR, OrInstructionData(reg)) {
+}
+
+XorInstructionData::XorInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+XorInstruction::XorInstruction(TargetRegister reg) : Instruction(INSTR_XOR, XorInstructionData(reg)) {
+}
+
+CpInstructionData::CpInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+CpInstruction::CpInstruction(TargetRegister reg) : Instruction(INSTR_CP, CpInstructionData(reg)) {
+}
+
+IncInstructionData::IncInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+IncInstruction::IncInstruction(TargetRegister reg) : Instruction(INSTR_INC, IncInstructionData(reg)) {
+}
+
+Inc16InstructionData::Inc16InstructionData(Target16Register target) : Target16InstructionData(target) {
+}
+
+Inc16Instruction::Inc16Instruction(Target16Register reg) : Instruction(INSTR_INC16, Inc16InstructionData(reg)) {
+}
+
+DecInstructionData::DecInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+DecInstruction::DecInstruction(TargetRegister reg) : Instruction(INSTR_DEC, DecInstructionData(reg)) {
+}
+
+Dec16InstructionData::Dec16InstructionData(Target16Register target) : Target16InstructionData(target) {
+}
+
+Dec16Instruction::Dec16Instruction(Target16Register reg) : Instruction(INSTR_DEC16, Dec16InstructionData(reg)) {
+}
+
+CcfInstruction::CcfInstruction(void): Instruction(INSTR_CCF, NoInstructionData()) {
+}
+
+ScfInstruction::ScfInstruction(void): Instruction(INSTR_SCF, NoInstructionData()) {
+}
+
+RraInstruction::RraInstruction(void): Instruction(INSTR_RRA, NoInstructionData()) {
+}
+
+RlaInstruction::RlaInstruction(void): Instruction(INSTR_RLA, NoInstructionData()) {
+}
+
+RrcaInstruction::RrcaInstruction(void): Instruction(INSTR_RRCA, NoInstructionData()) {
+}
+
+RlcaInstruction::RlcaInstruction(void): Instruction(INSTR_RLCA, NoInstructionData()) {
+}
+
+CplInstruction::CplInstruction(void): Instruction(INSTR_CPL, NoInstructionData()) {
+}
+
+TargetBitInstructionData::TargetBitInstructionData(TargetRegister target, uint8 bit) : TargetInstructionData(target) {
+    this->bit = bit;
+}
+
+BitInstructionData::BitInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+BitInstruction::BitInstruction(TargetRegister reg) : Instruction(INSTR_BIT, BitInstructionData(reg)) {
+}
+
+ResetInstructionData::ResetInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+ResetInstruction::ResetInstruction(TargetRegister reg) : Instruction(INSTR_RESET, ResetInstructionData(reg)) {
+}
+
+SetInstructionData::SetInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+SetInstruction::SetInstruction(TargetRegister reg) : Instruction(INSTR_SET, SetInstructionData(reg)) {
+}
+
+SrlInstructionData::SrlInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+SrlInstruction::SrlInstruction(TargetRegister reg) : Instruction(INSTR_SRL, SrlInstructionData(reg)) {
+}
+
+RrInstructionData::RrInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+RrInstruction::RrInstruction(TargetRegister reg) : Instruction(INSTR_RR, RrInstructionData(reg)) {
+}
+
+RlInstructionData::RlInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+RlInstruction::RlInstruction(TargetRegister reg) : Instruction(INSTR_RL, RlInstructionData(reg)) {
+}
+
+RrcInstructionData::RrcInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+RrcInstruction::RrcInstruction(TargetRegister reg) : Instruction(INSTR_RRC, RrcInstructionData(reg)) {
+}
+
+RlcInstructionData::RlcInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+RlcInstruction::RlcInstruction(TargetRegister reg) : Instruction(INSTR_RLC, RlcInstructionData(reg)) {
+}
+
+SraInstructionData::SraInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+SraInstruction::SraInstruction(TargetRegister reg) : Instruction(INSTR_SRA, SraInstructionData(reg)) {
+}
+
+SlaInstructionData::SlaInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+SlaInstruction::SlaInstruction(TargetRegister reg) : Instruction(INSTR_SLA, SlaInstructionData(reg)) {
+}
+
+SwapInstructionData::SwapInstructionData(TargetRegister target) : TargetInstructionData(target) {
+}
+
+SwapInstruction::SwapInstruction(TargetRegister reg) : Instruction(INSTR_SWAP, SwapInstructionData(reg)) {
+}
+
+JpInstruction::JpInstruction(JumpTest test) : Instruction(INSTR_JP, JumpInstructionData(test)) {
+}
+
+JrInstruction::JrInstruction(JumpTest test) : Instruction(INSTR_JR, JumpInstructionData(test)) {
+}
+
+JpiInstruction::JpiInstruction(void) : Instruction(INSTR_JPI, NoInstructionData()) {
+}
+
+LoadInstruction::LoadInstruction(LoadTarget target, LoadSource source): Instruction(INSTR_LOAD, LoadInstructionData(target, source)) {
+}
+
+Load16Instruction::Load16Instruction(Load16Target target, Load16Source source): Instruction(INSTR_LOAD16, Load16InstructionData(target, source)) {
+}
+
 Instruction Instruction::from_byte_prefixed(uint8 byte) {
     switch (byte) {
     case 0x37:
@@ -242,7 +438,8 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return AddInstruction(L);
     case 0x86:
         return AddInstruction(HL_PTR);
-        // TODO: ADD A,# C6
+    case 0xC6:
+        return AddInstruction(IMMEDIATE);
 
     case 0x8F:
         return AdcInstruction(A);
@@ -260,7 +457,8 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return AdcInstruction(L);
     case 0x8E:
         return AdcInstruction(HL_PTR);
-        // TODO: ADC A, # CE
+    case 0xCE:
+        return AdcInstruction(IMMEDIATE);
 
     case 0x97:
         return SubInstruction(A);
@@ -278,7 +476,8 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return SubInstruction(L);
     case 0x96:
         return SubInstruction(HL_PTR);
-        // TODO: add SUB # D6
+    case 0xD6:
+        return SubInstruction(IMMEDIATE);
 
     case 0x9F:
         return SbcInstruction(A);
@@ -314,7 +513,8 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return AndInstruction(L);
     case 0xA6:
         return AndInstruction(HL_PTR);
-        // TODO: AND # E6
+    case 0xE6:
+        return AndInstruction(IMMEDIATE);
 
     case 0xB7:
         return OrInstruction(A);
@@ -332,7 +532,8 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return OrInstruction(L);
     case 0xB6:
         return OrInstruction(HL_PTR);
-        // TODO: OR # F6
+    case 0xF6:
+        return OrInstruction(IMMEDIATE);
 
     case 0xAF:
         return XorInstruction(A);
@@ -350,7 +551,8 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return XorInstruction(L);
     case 0xAE:
         return XorInstruction(HL_PTR);
-        // TODO: XOR # EE
+    case 0xEE:
+        return XorInstruction(IMMEDIATE);
 
     case 0xBF:
         return CpInstruction(A);
@@ -368,7 +570,8 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return CpInstruction(L);
     case 0xBE:
         return CpInstruction(HL_PTR);
-        // TODO: CP # FE
+    case 0xFE:
+        return CpInstruction(IMMEDIATE);
 
     case 0x3C:
         return IncInstruction(A);
@@ -412,7 +615,6 @@ Instruction Instruction::from_byte_not_prefixed(uint8 byte) {
         return Addhl16Instruction(HL);
     case 0x39:
         return Addhl16Instruction(SP);
-        // TODO: ADDSP
 
     case 0x03:
         return Inc16Instruction(BC);
